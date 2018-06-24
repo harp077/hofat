@@ -478,10 +478,6 @@ public class HashTextGui extends javax.swing.JFrame {
     }//GEN-LAST:event_bcomboDeviceActionPerformed
 
     private void bcomboHashTipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bcomboHashTipActionPerformed
-        if (inTF.getText().length() != 0) {  
-            GetTextHash(inTF.getText());
-            return;
-        }
         String buf = "";
         try {
             HashTip = this.bcomboHashTip.getSelectedItem().toString();            
@@ -489,6 +485,10 @@ public class HashTextGui extends javax.swing.JFrame {
         } catch (NullPointerException ne) {  
             //Logger.getLogger(HashTextGui.class.getName()).log(Level.SEVERE, null, ne);   
         }
+        if (inTF.getText().length() != 0) {  
+            GetTextHash(inTF.getText());
+            return;
+        }        
         if (buf.length() != 0 && HashTip.length()!=0)  
             hashOfFile.hash_of_File(buf, HashTip);
     }//GEN-LAST:event_bcomboHashTipActionPerformed

@@ -16,8 +16,8 @@ import org.springframework.stereotype.Component;
 
 //@Service
 @Component
-//@Scope("singleton")
-@Scope("prototype")
+@Scope("singleton")
+//@Scope("prototype")
 //@Lazy(true)
 public class HashOfFile {
     
@@ -35,7 +35,7 @@ public class HashOfFile {
     }    
     
     @Async
-    public void hash_of_File(String path, String tip) {
+    public synchronized void hash_of_File(String path, String tip) {
         //String fileHash="";
         File buffile = new File(path);
         if (!buffile.isFile()) {

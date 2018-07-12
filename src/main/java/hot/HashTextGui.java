@@ -493,8 +493,10 @@ public class HashTextGui extends javax.swing.JFrame {
             hashOfFile.hash_of_File(buf, HashTip);
     }//GEN-LAST:event_bcomboHashTipActionPerformed
 
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
+    public synchronized static void main(String args[]) {
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+        //java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 //ApplicationContext 
                 // Shutdown Spring container gracefully in non-web applications !!
@@ -525,7 +527,7 @@ public class HashTextGui extends javax.swing.JFrame {
     private javax.swing.JButton bGetHash;
     private javax.swing.JButton bShowClip;
     public javax.swing.JComboBox<String> bcomboDevice;
-    public javax.swing.JComboBox<String> bcomboHashTip;
+    public volatile javax.swing.JComboBox<String> bcomboHashTip;
     public javax.swing.JTextArea inTF;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -551,6 +553,6 @@ public class HashTextGui extends javax.swing.JFrame {
     private javax.swing.JMenuItem mpCopyClip;
     private javax.swing.JPopupMenu mpMenu;
     private javax.swing.JMenuItem mpShowClip;
-    public javax.swing.JTextField outHashTF;
+    public volatile javax.swing.JTextField outHashTF;
     // End of variables declaration//GEN-END:variables
 }

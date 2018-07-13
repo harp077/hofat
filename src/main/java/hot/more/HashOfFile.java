@@ -43,6 +43,8 @@ public class HashOfFile {
             return;
         }
         hashTextGui.outHashTF.setText("PLEASE WAIT !!!");
+        /* FileInputStream and BufferedInputStream
+           implements AutoClosable     */
         try ( FileInputStream fis = new FileInputStream(buffile);
               BufferedInputStream bis = new BufferedInputStream(fis); )  {
             switch (tip) {

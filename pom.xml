@@ -67,8 +67,14 @@
             <groupId>com.jtattoo</groupId>
             <artifactId>JTattoo</artifactId>
             <version>1.6.11</version>
-        </dependency>                                                    
-        
+        </dependency>  
+        <!--
+        <dependency>
+            <groupId>net.sf.tinylaf</groupId>
+            <artifactId>tinylaf</artifactId>
+            <version>1.4.0</version>
+        </dependency>                                                                                                            
+        -->
     </dependencies>  
     
     <build>

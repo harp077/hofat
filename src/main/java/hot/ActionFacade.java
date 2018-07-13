@@ -101,9 +101,10 @@ public class ActionFacade {
         pgsTemes.add("vista");
         pgsTemes.add("silver");
         pgsTemes.add("native"); */       
-        /*MyInstLF("de.muntjak.tinylookandfeel.TinyLookAndFeel");
-        MyInstLF("javax.swing.plaf.metal.MetalLookAndFeel");
-        MyInstLF("com.pagosoft.plaf.PgsLookAndFeel");
+        //MyInstLF("de.muntjak.tinylookandfeel.TinyLookAndFeel");
+        //MyInstLF("net.sf.tinylaf.TinyLookAndFeel");
+        //MyInstLF("javax.swing.plaf.metal.MetalLookAndFeel");
+        /*MyInstLF("com.pagosoft.plaf.PgsLookAndFeel");
         MyInstLF("com.birosoft.liquid.LiquidLookAndFeel");
         MyInstLF("net.beeger.squareness.SquarenessLookAndFeel");
         MyInstLF("com.lipstikLF.LipstikLookAndFeel");

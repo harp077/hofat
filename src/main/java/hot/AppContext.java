@@ -1,6 +1,7 @@
 package hot;
 
 import java.util.concurrent.Executor;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -39,6 +40,11 @@ public class AppContext {
     public void checkValue(){
             System.out.println(HashTip);        
     }*/
+    
+    @Bean(name = "loggerBean")
+    public Logger loggerBean() {
+        return Logger.getLogger("loggerBean");
+    }    
     
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {

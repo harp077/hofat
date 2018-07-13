@@ -16,6 +16,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Lazy;
@@ -34,6 +35,10 @@ public class ActionFacade {
     //private String currentTheme;    
     @Value("${skin}")
     private String currentLAF;
+    
+    @Inject
+    @Qualifier("loggerBean")
+    private Logger logBean;    
 
     @Inject
     private TextTransfer textTransfer;
@@ -103,7 +108,7 @@ public class ActionFacade {
         pgsTemes.add("native"); */       
         //MyInstLF("de.muntjak.tinylookandfeel.TinyLookAndFeel");
         //MyInstLF("net.sf.tinylaf.TinyLookAndFeel");
-        //MyInstLF("javax.swing.plaf.metal.MetalLookAndFeel");
+        MyInstLF("javax.swing.plaf.metal.MetalLookAndFeel");
         /*MyInstLF("com.pagosoft.plaf.PgsLookAndFeel");
         MyInstLF("com.birosoft.liquid.LiquidLookAndFeel");
         MyInstLF("net.beeger.squareness.SquarenessLookAndFeel");
@@ -113,7 +118,7 @@ public class ActionFacade {
         MyInstLF("com.jgoodies.looks.plastic.Plastic3DLookAndFeel");
         MyInstLF("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");*/
         ///////////////////
-        MyInstLF("com.jtattoo.plaf.acryl.AcrylLookAndFeel");
+        /*MyInstLF("com.jtattoo.plaf.acryl.AcrylLookAndFeel");
         MyInstLF("com.jtattoo.plaf.aero.AeroLookAndFeel");
         MyInstLF("com.jtattoo.plaf.aluminium.AluminiumLookAndFeel");
         MyInstLF("com.jtattoo.plaf.fast.FastLookAndFeel");
@@ -125,9 +130,9 @@ public class ActionFacade {
         MyInstLF("com.jtattoo.plaf.luna.LunaLookAndFeel");
         MyInstLF("com.jtattoo.plaf.texture.TextureLookAndFeel");
         MyInstLF("com.jtattoo.plaf.graphite.GraphiteLookAndFeel");
-        MyInstLF("com.jtattoo.plaf.bernstein.BernsteinLookAndFeel");
+        MyInstLF("com.jtattoo.plaf.bernstein.BernsteinLookAndFeel");*/
         ///////////////////////
-        /*MyInstLF("org.pushingpixels.substance.api.skin.SubstanceSaharaLookAndFeel");
+        MyInstLF("org.pushingpixels.substance.api.skin.SubstanceSaharaLookAndFeel");
         MyInstLF("org.pushingpixels.substance.api.skin.SubstanceAutumnLookAndFeel");
         MyInstLF("org.pushingpixels.substance.api.skin.SubstanceCremeLookAndFeel");
         MyInstLF("org.pushingpixels.substance.api.skin.SubstanceCremeCoffeeLookAndFeel");                  
@@ -155,7 +160,7 @@ public class ActionFacade {
         MyInstLF("org.pushingpixels.substance.api.skin.SubstanceCeruleanLookAndFeel"); 
         MyInstLF("org.pushingpixels.substance.api.skin.SubstanceEmeraldDuskLookAndFeel");
         MyInstLF("org.pushingpixels.substance.api.skin.SubstanceChallengerDeepLookAndFeel");
-        */        
+               
     }
 
     public void setLF(JFrame frame) {
@@ -189,7 +194,7 @@ public class ActionFacade {
         try {
             UIManager.setLookAndFeel(currentLAF);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(ActionFacade.class.getName()).log(Level.SEVERE, null, ex);
+            logBean.log(Level.SEVERE, null, ex);
         }
         SwingUtilities.updateComponentTreeUI(frame);
     }

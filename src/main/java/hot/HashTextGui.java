@@ -16,19 +16,15 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -46,6 +42,9 @@ public class HashTextGui extends javax.swing.JFrame {
     private FileSystemModel fsModel;
     @Inject
     private ActionFacade actionFacade;
+    @Inject
+    @Qualifier("loggerBean")
+    private Logger logBean;
 
     @Value("${hash}")
     private String HashTip;
@@ -55,7 +54,7 @@ public class HashTextGui extends javax.swing.JFrame {
     private String top;
 
     public static HashTextGui frame;
-    private static final Dimension frameDimension = new Dimension(600, 500);
+    private static final Dimension frameDimension = new Dimension(640, 500);
     public static String[] typeHashArray = {"md2", "md5", "sha1", "sha256", "sha384", "sha512"};
     public ImageIcon FrameIcon = new ImageIcon(getClass().getResource("/img/SubFrameIcon.png"));
     //private String buferHashOfFile = "";
@@ -66,8 +65,8 @@ public class HashTextGui extends javax.swing.JFrame {
         this.setIconImage(FrameIcon.getImage());
         this.outHashTF.setComponentPopupMenu(mpMenu);
         this.bcomboHashTip.setModel(new DefaultComboBoxModel<>(typeHashArray));
-        jTabbedPane1.addTab("Input Text for hash:", new ImageIcon(getClass().getResource("/img/16x16/text1.png")), jScrollPane1);
-        jTabbedPane1.addTab("Click File for Hash:", new ImageIcon(getClass().getResource("/img/16x16/tree.png")), jScrollPane2);
+        jTabbedPane1.addTab("Input Text for hash:", new ImageIcon(getClass().getResource("/img/16x16/text1.png")), textScrollPane);
+        jTabbedPane1.addTab("Click File for Hash:", new ImageIcon(getClass().getResource("/img/16x16/tree.png")), fileScrollPane);
     }
 
     @PostConstruct
@@ -75,6 +74,8 @@ public class HashTextGui extends javax.swing.JFrame {
         System.out.println(HashTip);
         System.out.println(currentLAF);
         this.bcomboHashTip.setSelectedItem(HashTip);
+        this.bcomboHashTip.setVisible(false);
+        jRadioButtonMd5.setSelected(true);
         this.bcomboDevice.setModel(new DefaultComboBoxModel<>(fsModel.getAllrootsString()));
         //this.bcomboDevice.setSelectedIndex(1);
         this.jTree1.setModel(fsModel);
@@ -83,6 +84,12 @@ public class HashTextGui extends javax.swing.JFrame {
         this.jTabbedPane1.setSelectedIndex(1);
         textTransfer.setClipboardContents("");
         this.setTitle(top);
+        btnGroup.add(jRadioButtonMd2);
+        btnGroup.add(jRadioButtonMd5);
+        btnGroup.add(jRadioButtonSha1);
+        btnGroup.add(jRadioButtonSha256);
+        btnGroup.add(jRadioButtonSha384);
+        btnGroup.add(jRadioButtonSha512);
     }
 
     //@Scheduled(cron = "*/1 * * * * *")
@@ -96,7 +103,6 @@ public class HashTextGui extends javax.swing.JFrame {
     - self-invocation – calling the async method from within the same class – won’t work
     The reasons are simple – the method needs to be public so that it can be proxied. 
     And self-invocation doesn’t work because it bypasses the proxy and calls the underlying method directly.  */
-
     public void GetTextHash(String buf) {
         if (!buf.isEmpty()) {
             switch (HashTip) {
@@ -134,10 +140,76 @@ public class HashTextGui extends javax.swing.JFrame {
         try {
             UIManager.setLookAndFeel(currentLAF);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(HashTextGui.class.getName()).log(Level.SEVERE, null, ex);
+            logBean.log(Level.SEVERE, null, ex);
         }
         SwingUtilities.updateComponentTreeUI(frame);
     }
+
+    public void changeHashTipRadio(String tip) {
+        String buf;
+        HashTip = tip;
+        /*jRadioButtonMd2.setSelected(false);
+        jRadioButtonMd5.setSelected(false);
+        jRadioButtonSha1.setSelected(false);
+        jRadioButtonSha256.setSelected(false);
+        jRadioButtonSha384.setSelected(false);
+        jRadioButtonSha512.setSelected(false);
+        switch (HashTip) {
+            case "md2":
+                jRadioButtonMd2.setSelected(true);
+                break;
+            case "md5":
+                jRadioButtonMd5.setSelected(true);
+                break;
+            case "sha1":
+                jRadioButtonSha1.setSelected(true);
+                break;
+            case "sha256":
+                jRadioButtonSha256.setSelected(true);
+                break;
+            case "sha384":
+                jRadioButtonSha384.setSelected(true);
+                break;
+            case "sha512":
+                jRadioButtonSha512.setSelected(true);
+                break;
+        }*/
+        if (textScrollPane.isShowing()) {
+            if (inTF.getText().length() != 0) {
+                GetTextHash(inTF.getText());
+            }
+            return;
+        }
+        if (fileScrollPane.isShowing()) {
+            try {
+                buf = jTree1.getSelectionPath().getLastPathComponent().toString();
+            } catch (NullPointerException ne) {
+                logBean.log(Level.SEVERE, null, ne);
+                return;
+            }
+            hashOfFile.hash_of_File(buf, HashTip);
+        }
+    }
+    
+    public void changeHashTipCombo(String tip) {
+        String buf;
+        HashTip = tip;
+        if (textScrollPane.isShowing()) {
+            if (inTF.getText().length() != 0) {
+                GetTextHash(inTF.getText());
+            }
+            return;
+        }
+        if (fileScrollPane.isShowing()) {
+            try {
+                buf = jTree1.getSelectionPath().getLastPathComponent().toString();
+            } catch (NullPointerException ne) {
+                logBean.log(Level.SEVERE, null, ne);
+                return;
+            }
+            hashOfFile.hash_of_File(buf, HashTip);
+        }
+    }    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -146,25 +218,31 @@ public class HashTextGui extends javax.swing.JFrame {
         mpMenu = new javax.swing.JPopupMenu();
         mpCopyClip = new javax.swing.JMenuItem();
         mpShowClip = new javax.swing.JMenuItem();
+        btnGroup = new javax.swing.ButtonGroup();
         jToolBar1 = new javax.swing.JToolBar();
         bGetHash = new javax.swing.JButton();
         bCopy = new javax.swing.JButton();
         bShowClip = new javax.swing.JButton();
         bClear = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        bAbout = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        btnSkin = new javax.swing.JButton();
+        jSeparator3 = new javax.swing.JToolBar.Separator();
+        jRadioButtonMd2 = new javax.swing.JRadioButton();
+        jRadioButtonMd5 = new javax.swing.JRadioButton();
+        jRadioButtonSha1 = new javax.swing.JRadioButton();
+        jRadioButtonSha256 = new javax.swing.JRadioButton();
+        jRadioButtonSha384 = new javax.swing.JRadioButton();
+        jRadioButtonSha512 = new javax.swing.JRadioButton();
+        jSeparator4 = new javax.swing.JToolBar.Separator();
         bcomboHashTip = new javax.swing.JComboBox<>();
-        jSeparator2 = new javax.swing.JToolBar.Separator();
         jLabel2 = new javax.swing.JLabel();
         bcomboDevice = new javax.swing.JComboBox<>();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         jToolBar2 = new javax.swing.JToolBar();
         outHashTF = new javax.swing.JTextField();
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        textScrollPane = new javax.swing.JScrollPane();
         inTF = new javax.swing.JTextArea();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        fileScrollPane = new javax.swing.JScrollPane();
         jTree1 = new javax.swing.JTree();
         jMenuBar1 = new javax.swing.JMenuBar();
         mFile = new javax.swing.JMenu();
@@ -241,39 +319,92 @@ public class HashTextGui extends javax.swing.JFrame {
         });
         jToolBar1.add(bClear);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/24x24/skin_color_chooser-24.png"))); // NOI18N
-        jButton1.setToolTipText("Skin Change");
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnSkin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/24x24/skin_color_chooser-24.png"))); // NOI18N
+        btnSkin.setFocusable(false);
+        btnSkin.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSkin.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSkin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnSkinActionPerformed(evt);
             }
         });
-        jToolBar1.add(jButton1);
+        jToolBar1.add(btnSkin);
+        jToolBar1.add(jSeparator3);
 
-        bAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/24x24/info-book-green.png"))); // NOI18N
-        bAbout.setToolTipText("About");
-        bAbout.addActionListener(new java.awt.event.ActionListener() {
+        jRadioButtonMd2.setText("md2 ");
+        jRadioButtonMd2.setFocusable(false);
+        jRadioButtonMd2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButtonMd2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jRadioButtonMd2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bAboutActionPerformed(evt);
+                jRadioButtonMd2ActionPerformed(evt);
             }
         });
-        jToolBar1.add(bAbout);
+        jToolBar1.add(jRadioButtonMd2);
 
-        jLabel1.setText("   Hash Type = ");
-        jToolBar1.add(jLabel1);
+        jRadioButtonMd5.setText("md5");
+        jRadioButtonMd5.setFocusable(false);
+        jRadioButtonMd5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButtonMd5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jRadioButtonMd5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonMd5ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jRadioButtonMd5);
 
-        bcomboHashTip.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "md2", "md5", "sha1", " " }));
-        bcomboHashTip.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jRadioButtonSha1.setText("sha1");
+        jRadioButtonSha1.setFocusable(false);
+        jRadioButtonSha1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButtonSha1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jRadioButtonSha1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonSha1ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jRadioButtonSha1);
+
+        jRadioButtonSha256.setText("sha256");
+        jRadioButtonSha256.setFocusable(false);
+        jRadioButtonSha256.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButtonSha256.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jRadioButtonSha256.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonSha256ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jRadioButtonSha256);
+
+        jRadioButtonSha384.setText("sha384");
+        jRadioButtonSha384.setFocusable(false);
+        jRadioButtonSha384.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButtonSha384.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jRadioButtonSha384.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonSha384ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jRadioButtonSha384);
+
+        jRadioButtonSha512.setText("sha512");
+        jRadioButtonSha512.setFocusable(false);
+        jRadioButtonSha512.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButtonSha512.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jRadioButtonSha512.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonSha512ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jRadioButtonSha512);
+        jToolBar1.add(jSeparator4);
+
+        bcomboHashTip.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         bcomboHashTip.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bcomboHashTipActionPerformed(evt);
             }
         });
         jToolBar1.add(bcomboHashTip);
-        jToolBar1.add(jSeparator2);
 
         jLabel2.setText("Device = ");
         jToolBar1.add(jLabel2);
@@ -306,9 +437,9 @@ public class HashTextGui extends javax.swing.JFrame {
         inTF.setColumns(20);
         inTF.setRows(5);
         inTF.setToolTipText("");
-        jScrollPane1.setViewportView(inTF);
+        textScrollPane.setViewportView(inTF);
 
-        jTabbedPane1.addTab("Input Text for hash:", new javax.swing.ImageIcon(getClass().getResource("/img/16x16/text1.png")), jScrollPane1); // NOI18N
+        jTabbedPane1.addTab("Input Text for hash:", new javax.swing.ImageIcon(getClass().getResource("/img/16x16/text1.png")), textScrollPane); // NOI18N
 
         jTree1.setModel(fsModel);
         jTree1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -316,9 +447,9 @@ public class HashTextGui extends javax.swing.JFrame {
                 jTree1MouseClicked(evt);
             }
         });
-        jScrollPane2.setViewportView(jTree1);
+        fileScrollPane.setViewportView(jTree1);
 
-        jTabbedPane1.addTab("Click on File for Hash:", jScrollPane2);
+        jTabbedPane1.addTab("Click on File for Hash:", fileScrollPane);
 
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
         jTabbedPane1.getAccessibleContext().setAccessibleName("Input Text");
@@ -408,10 +539,6 @@ public class HashTextGui extends javax.swing.JFrame {
         textTransfer.setClipboardContents(frame.outHashTF.getText());
     }//GEN-LAST:event_bCopyActionPerformed
 
-    private void bAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAboutActionPerformed
-        actionFacade.about(frame);
-    }//GEN-LAST:event_bAboutActionPerformed
-
     private void mAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mAboutActionPerformed
         actionFacade.about(frame);
     }//GEN-LAST:event_mAboutActionPerformed
@@ -443,10 +570,6 @@ public class HashTextGui extends javax.swing.JFrame {
         actionFacade.showClipboard(frame);
     }//GEN-LAST:event_bShowClipActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        actionFacade.changeLF(frame);
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         actionFacade.showClipboard(frame);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
@@ -465,9 +588,10 @@ public class HashTextGui extends javax.swing.JFrame {
 
     private void jTree1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTree1MouseClicked
         inTF.setText("");
-        try {        
-            hashOfFile.hash_of_File(jTree1.getSelectionPath().getLastPathComponent().toString(), this.bcomboHashTip.getSelectedItem().toString());
-        } catch (NullPointerException ne) {        }        
+        try {
+            hashOfFile.hash_of_File(jTree1.getSelectionPath().getLastPathComponent().toString(), HashTip);
+        } catch (NullPointerException ne) {
+        }
     }//GEN-LAST:event_jTree1MouseClicked
 
     private void bcomboDeviceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bcomboDeviceActionPerformed
@@ -477,25 +601,41 @@ public class HashTextGui extends javax.swing.JFrame {
         SwingUtilities.updateComponentTreeUI(jTree1);
     }//GEN-LAST:event_bcomboDeviceActionPerformed
 
+    private void jRadioButtonMd2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMd2ActionPerformed
+        changeHashTipRadio("md2");
+    }//GEN-LAST:event_jRadioButtonMd2ActionPerformed
+
+    private void jRadioButtonMd5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMd5ActionPerformed
+        changeHashTipRadio("md5");
+    }//GEN-LAST:event_jRadioButtonMd5ActionPerformed
+
+    private void jRadioButtonSha1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonSha1ActionPerformed
+        changeHashTipRadio("sha1");
+    }//GEN-LAST:event_jRadioButtonSha1ActionPerformed
+
+    private void jRadioButtonSha256ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonSha256ActionPerformed
+        changeHashTipRadio("sha256");
+    }//GEN-LAST:event_jRadioButtonSha256ActionPerformed
+
+    private void jRadioButtonSha384ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonSha384ActionPerformed
+        changeHashTipRadio("sha384");
+    }//GEN-LAST:event_jRadioButtonSha384ActionPerformed
+
+    private void jRadioButtonSha512ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonSha512ActionPerformed
+        changeHashTipRadio("sha512");
+    }//GEN-LAST:event_jRadioButtonSha512ActionPerformed
+
     private void bcomboHashTipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bcomboHashTipActionPerformed
-        String buf = "";
-        try {
-            HashTip = this.bcomboHashTip.getSelectedItem().toString();            
-            buf = jTree1.getSelectionPath().getLastPathComponent().toString();
-        } catch (NullPointerException ne) {  
-            //Logger.getLogger(HashTextGui.class.getName()).log(Level.SEVERE, null, ne);   
-        }
-        if (inTF.getText().length() != 0) {  
-            GetTextHash(inTF.getText());
-            return;
-        }        
-        if (buf.length() != 0 && HashTip.length()!=0)  
-            hashOfFile.hash_of_File(buf, HashTip);
+        changeHashTipCombo(bcomboHashTip.getSelectedItem().toString());
     }//GEN-LAST:event_bcomboHashTipActionPerformed
+
+    private void btnSkinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkinActionPerformed
+        actionFacade.changeLF(frame);
+    }//GEN-LAST:event_btnSkinActionPerformed
 
     public synchronized static void main(String args[]) {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
-        //java.awt.EventQueue.invokeLater(new Runnable() {
+            //java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
                 //ApplicationContext 
@@ -507,7 +647,7 @@ public class HashTextGui extends javax.swing.JFrame {
                 // main method exits, hook is called prior to the app shutting down...
                 // define @PreDestroy methods for your beans !!! - it is called before close App !!!
                 System.out.println("main potok = " + Thread.currentThread().getName());
-                System.out.println(" CPU cores = 0 - " + ForkJoinPool.getCommonPoolParallelism());                
+                System.out.println(" CPU cores = 0 - " + ForkJoinPool.getCommonPoolParallelism());
                 frame = ctx.getBean(HashTextGui.class);
                 frame.getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
                 frame.setLF(frame);
@@ -517,28 +657,33 @@ public class HashTextGui extends javax.swing.JFrame {
             }
         });
     }
-    
+
     // DO NOT USE STATIC FIELDS WITH SPRING !!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bAbout;
     private javax.swing.JButton bClear;
     private javax.swing.JButton bCopy;
     private javax.swing.JButton bGetHash;
     private javax.swing.JButton bShowClip;
     public javax.swing.JComboBox<String> bcomboDevice;
-    public volatile javax.swing.JComboBox<String> bcomboHashTip;
+    private volatile javax.swing.JComboBox<String> bcomboHashTip;
+    private javax.swing.ButtonGroup btnGroup;
+    private javax.swing.JButton btnSkin;
+    private javax.swing.JScrollPane fileScrollPane;
     public javax.swing.JTextArea inTF;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JRadioButton jRadioButtonMd2;
+    private javax.swing.JRadioButton jRadioButtonMd5;
+    private javax.swing.JRadioButton jRadioButtonSha1;
+    private javax.swing.JRadioButton jRadioButtonSha256;
+    private javax.swing.JRadioButton jRadioButtonSha384;
+    private javax.swing.JRadioButton jRadioButtonSha512;
     private javax.swing.JToolBar.Separator jSeparator1;
-    private javax.swing.JToolBar.Separator jSeparator2;
+    private javax.swing.JToolBar.Separator jSeparator3;
+    private javax.swing.JToolBar.Separator jSeparator4;
     public javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
@@ -554,5 +699,6 @@ public class HashTextGui extends javax.swing.JFrame {
     private javax.swing.JPopupMenu mpMenu;
     private javax.swing.JMenuItem mpShowClip;
     public volatile javax.swing.JTextField outHashTF;
+    private javax.swing.JScrollPane textScrollPane;
     // End of variables declaration//GEN-END:variables
 }

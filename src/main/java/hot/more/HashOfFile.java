@@ -7,9 +7,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -24,8 +27,9 @@ public class HashOfFile {
     @Inject
     private HashTextGui hashTextGui;
     
-    //@Inject
-    //private TaskExecutor executor;
+    @Inject
+    @Qualifier("loggerBean")
+    private Logger logBean;   
     
     private String fileHash="";
     
@@ -62,9 +66,9 @@ public class HashOfFile {
             //return;
             //executor.
         } catch (FileNotFoundException fex) {
-            //Logger.getLogger(HashOfFile.class.getName()).log(Level.SEVERE, null, fex);
+            logBean.log(Level.SEVERE, null, fex);
         } catch (IOException ex) {
-            //Logger.getLogger(HashOfFile.class.getName()).log(Level.SEVERE, null, ex);
+            logBean.log(Level.SEVERE, null, ex);
         } //catch (InterruptedException ex) {
           //  Logger.getLogger(HashOfFile.class.getName()).log(Level.SEVERE, null, ex);
         //} 

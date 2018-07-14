@@ -64,6 +64,14 @@
         </dependency>
         <!--
         <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+            <version>1.2</version>
+            <scope>provided</scope>
+        </dependency>        
+        -->
+        <!--
+        <dependency>
             <groupId>com.jtattoo</groupId>
             <artifactId>JTattoo</artifactId>
             <version>1.6.11</version>

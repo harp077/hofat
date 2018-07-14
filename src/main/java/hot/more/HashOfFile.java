@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
@@ -22,7 +23,9 @@ import org.springframework.stereotype.Component;
 @Scope("singleton")
 //@Scope("prototype")
 //@Lazy(true)
-public class HashOfFile {
+public class HashOfFile implements BeanNameAware {
+    
+    private String myName;
     
     @Inject
     private HashTextGui hashTextGui;
@@ -33,9 +36,15 @@ public class HashOfFile {
     
     private String fileHash="";
     
+    @Override
+    public void setBeanName (String myName) {
+        this.myName=myName;
+    }
+    
     @PostConstruct
     public void afterBirn(){
-        System.out.println("Bean HashOfFile potok = " + Thread.currentThread().getName());  
+        System.out.println("Bean HashOfFile potok = " + Thread.currentThread().getName()); 
+        System.out.println("HashOfFile: my name is = " + myName); 
     }    
     
     @Async

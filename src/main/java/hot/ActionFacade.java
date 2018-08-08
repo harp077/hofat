@@ -78,7 +78,8 @@ public class ActionFacade {
                 + "Developed with Java Spring Framework.\n"
                 + "Tested in Windows/Linux. Need JRE-1.8\n"
                 + "Roman Koldaev, Saratov city, Russia.\n"
-                + "Home=http://hofat.sf.net/ ,\n"
+                + "Home = http://hofat.sf.net/  or \n"
+                + "https://github.com/harp077/hofat/ \n"
                 + "Mail=harp07@mail.ru",
                 top, JOptionPane.INFORMATION_MESSAGE, icon);
     }

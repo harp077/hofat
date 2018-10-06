@@ -1,6 +1,8 @@
 package hot;
 
 //import hot.clipboard.ShowClipboard;
+import com.google.common.base.Charsets;
+import com.google.common.hash.Hashing;
 import hot.more.TextTransfer;
 import hot.more.HashOfFile;
 import hot.fsmodel.FileSystemModel;
@@ -55,7 +57,7 @@ public class HashTextGui extends javax.swing.JFrame {
 
     public static HashTextGui frame;
     private static final Dimension frameDimension = new Dimension(640, 500);
-    public static String[] typeHashArray = {"md2", "md5", "sha1", "sha256", "sha384", "sha512"};
+    public static String[] typeHashArray = {"md2", "md5", "sha1", "crc32", "crc32c", "sha256", "sha384", "sha512"};
     public ImageIcon FrameIcon = new ImageIcon(getClass().getResource("/img/SubFrameIcon.png"));
     //private String buferHashOfFile = "";
     //private int k = 0;
@@ -87,6 +89,8 @@ public class HashTextGui extends javax.swing.JFrame {
         btnGroup.add(jRadioButtonMd2);
         btnGroup.add(jRadioButtonMd5);
         btnGroup.add(jRadioButtonSha1);
+        btnGroup.add(jRadioButtonCrc32);
+        btnGroup.add(jRadioButtonCrc32c);
         btnGroup.add(jRadioButtonSha256);
         btnGroup.add(jRadioButtonSha384);
         btnGroup.add(jRadioButtonSha512);
@@ -115,6 +119,14 @@ public class HashTextGui extends javax.swing.JFrame {
                 case "sha1":
                     frame.outHashTF.setText(DigestUtils.sha1Hex(buf));
                     break;
+                case "crc32":
+                    //frame.outHashTF.setText( Hashing.crc32().hashString(buf, Charsets.UTF_8).toString());
+                    frame.outHashTF.setText( Hashing.crc32().hashUnencodedChars(buf).toString());
+                    break;   
+                case "crc32c":
+                    //frame.outHashTF.setText(Hashing.crc32c().hashString(buf, Charsets.UTF_8).toString());
+                    frame.outHashTF.setText(Hashing.crc32c().hashUnencodedChars(buf).toString());
+                    break;                    
                 case "sha256":
                     frame.outHashTF.setText(DigestUtils.sha256Hex(buf));
                     break;
@@ -229,6 +241,8 @@ public class HashTextGui extends javax.swing.JFrame {
         jRadioButtonMd2 = new javax.swing.JRadioButton();
         jRadioButtonMd5 = new javax.swing.JRadioButton();
         jRadioButtonSha1 = new javax.swing.JRadioButton();
+        jRadioButtonCrc32 = new javax.swing.JRadioButton();
+        jRadioButtonCrc32c = new javax.swing.JRadioButton();
         jRadioButtonSha256 = new javax.swing.JRadioButton();
         jRadioButtonSha384 = new javax.swing.JRadioButton();
         jRadioButtonSha512 = new javax.swing.JRadioButton();
@@ -363,6 +377,28 @@ public class HashTextGui extends javax.swing.JFrame {
             }
         });
         jToolBar1.add(jRadioButtonSha1);
+
+        jRadioButtonCrc32.setText("crc32");
+        jRadioButtonCrc32.setFocusable(false);
+        jRadioButtonCrc32.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButtonCrc32.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jRadioButtonCrc32.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonCrc32ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jRadioButtonCrc32);
+
+        jRadioButtonCrc32c.setText("crc32c");
+        jRadioButtonCrc32c.setFocusable(false);
+        jRadioButtonCrc32c.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRadioButtonCrc32c.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jRadioButtonCrc32c.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonCrc32cActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jRadioButtonCrc32c);
 
         jRadioButtonSha256.setText("sha256");
         jRadioButtonSha256.setFocusable(false);
@@ -633,6 +669,14 @@ public class HashTextGui extends javax.swing.JFrame {
         actionFacade.changeLF(frame);
     }//GEN-LAST:event_btnSkinActionPerformed
 
+    private void jRadioButtonCrc32ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonCrc32ActionPerformed
+        changeHashTipRadio("crc32");
+    }//GEN-LAST:event_jRadioButtonCrc32ActionPerformed
+
+    private void jRadioButtonCrc32cActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonCrc32cActionPerformed
+        changeHashTipRadio("crc32c");
+    }//GEN-LAST:event_jRadioButtonCrc32cActionPerformed
+
     public synchronized static void main(String args[]) {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             //java.awt.EventQueue.invokeLater(new Runnable() {
@@ -675,6 +719,8 @@ public class HashTextGui extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JRadioButton jRadioButtonCrc32;
+    private javax.swing.JRadioButton jRadioButtonCrc32c;
     private javax.swing.JRadioButton jRadioButtonMd2;
     private javax.swing.JRadioButton jRadioButtonMd5;
     private javax.swing.JRadioButton jRadioButtonSha1;

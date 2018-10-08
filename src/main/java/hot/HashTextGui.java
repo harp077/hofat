@@ -56,7 +56,7 @@ public class HashTextGui extends javax.swing.JFrame {
     private String top;
 
     public static HashTextGui frame;
-    private static final Dimension frameDimension = new Dimension(640, 500);
+    private static final Dimension frameDimension = new Dimension(720, 512);
     public static String[] typeHashArray = {"md2", "md5", "sha1", "crc32", "crc32c", "sha256", "sha384", "sha512"};
     public ImageIcon FrameIcon = new ImageIcon(getClass().getResource("/img/SubFrameIcon.png"));
     //private String buferHashOfFile = "";

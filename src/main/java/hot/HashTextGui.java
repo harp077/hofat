@@ -232,7 +232,7 @@ public class HashTextGui extends javax.swing.JFrame {
         jToolBar1.setBorder(javax.swing.BorderFactory.createTitledBorder("Tools"));
         jToolBar1.setFloatable(false);
 
-        bGetHash.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/16x16/play_green-1.png"))); // NOI18N
+        bGetHash.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/16x16/go-green-krug-16.png"))); // NOI18N
         bGetHash.setToolTipText("Get Hash of Text");
         bGetHash.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -519,8 +519,8 @@ public class HashTextGui extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(HashTextGui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }  */      
         
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            //java.awt.EventQueue.invokeLater(new Runnable() {
+        //javax.swing.SwingUtilities.invokeLater(new Runnable() {
+        java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
                 //ApplicationContext 

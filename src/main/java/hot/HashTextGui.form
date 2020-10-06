@@ -164,7 +164,7 @@
         <Component class="javax.swing.JButton" name="bGetHash">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/img/16x16/play_green-1.png"/>
+              <Image iconType="3" name="/img/16x16/go-green-krug-16.png"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Get Hash of Text"/>
           </Properties>

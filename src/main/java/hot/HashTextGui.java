@@ -189,6 +189,7 @@ public class HashTextGui extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         bcomboDevice = new javax.swing.JComboBox<>();
         jSeparator1 = new javax.swing.JToolBar.Separator();
+        jButton1 = new javax.swing.JButton();
         jToolBar2 = new javax.swing.JToolBar();
         jScrollPane1 = new javax.swing.JScrollPane();
         outHashTA = new javax.swing.JTextArea();
@@ -228,6 +229,7 @@ public class HashTextGui extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("HashText");
         setUndecorated(true);
+        getContentPane().setLayout(new java.awt.BorderLayout());
 
         jToolBar1.setBorder(javax.swing.BorderFactory.createTitledBorder("Tools"));
         jToolBar1.setFloatable(false);
@@ -320,6 +322,18 @@ public class HashTextGui extends javax.swing.JFrame {
         });
         jToolBar1.add(bcomboDevice);
         jToolBar1.add(jSeparator1);
+
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/16x16/quit.png"))); // NOI18N
+        jButton1.setToolTipText("Exit");
+        jButton1.setFocusable(false);
+        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jButton1);
 
         getContentPane().add(jToolBar1, java.awt.BorderLayout.NORTH);
 
@@ -507,6 +521,13 @@ public class HashTextGui extends javax.swing.JFrame {
         actionFacade.about(frame);
     }//GEN-LAST:event_btnAboutActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        int r = JOptionPane.showConfirmDialog(frame, "Exit HOFAT ?", "Quit HOFAT", JOptionPane.YES_NO_OPTION);
+        if (r == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     public synchronized static void main(String args[]) {
         
         /*try {
@@ -558,6 +579,7 @@ public class HashTextGui extends javax.swing.JFrame {
     private javax.swing.JButton btnInfo;
     private javax.swing.JScrollPane fileScrollPane;
     public javax.swing.JTextArea inTF;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenuBar jMenuBar1;

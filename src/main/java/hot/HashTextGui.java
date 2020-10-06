@@ -7,6 +7,7 @@ import hot.more.TextTransfer;
 import hot.more.HashOfFile;
 import hot.fsmodel.FileSystemModel;
 import java.awt.Dimension;
+import java.security.Security;
 import java.util.concurrent.ForkJoinPool;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -179,9 +180,10 @@ public class HashTextGui extends javax.swing.JFrame {
         bCopy = new javax.swing.JButton();
         bShowClip = new javax.swing.JButton();
         bClear = new javax.swing.JButton();
+        btnInfo = new javax.swing.JButton();
+        btnAbout = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JToolBar.Separator();
         jLabel1 = new javax.swing.JLabel();
-        jSeparator4 = new javax.swing.JToolBar.Separator();
         bcomboHashTip = new javax.swing.JComboBox<>();
         jSeparator2 = new javax.swing.JToolBar.Separator();
         jLabel2 = new javax.swing.JLabel();
@@ -268,11 +270,34 @@ public class HashTextGui extends javax.swing.JFrame {
             }
         });
         jToolBar1.add(bClear);
+
+        btnInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/16x16/info-cyan-16.png"))); // NOI18N
+        btnInfo.setToolTipText("JDK Available Message Digest");
+        btnInfo.setFocusable(false);
+        btnInfo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnInfo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnInfo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInfoActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnInfo);
+
+        btnAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/16x16/help-cyan-16.png"))); // NOI18N
+        btnAbout.setToolTipText("about");
+        btnAbout.setFocusable(false);
+        btnAbout.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAbout.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAbout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAboutActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnAbout);
         jToolBar1.add(jSeparator3);
 
         jLabel1.setText("Hash Type: ");
         jToolBar1.add(jLabel1);
-        jToolBar1.add(jSeparator4);
 
         bcomboHashTip.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         bcomboHashTip.addActionListener(new java.awt.event.ActionListener() {
@@ -301,7 +326,7 @@ public class HashTextGui extends javax.swing.JFrame {
         jToolBar2.setFloatable(false);
         jToolBar2.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("Output Hash"));
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("Output Hash, right click for context-menu"));
 
         outHashTA.setColumns(20);
         outHashTA.setRows(5);
@@ -472,6 +497,15 @@ public class HashTextGui extends javax.swing.JFrame {
         changeHashTipCombo(bcomboHashTip.getSelectedItem().toString());
     }//GEN-LAST:event_bcomboHashTipActionPerformed
 
+    private void btnInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInfoActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(frame, "JDK available message digest:\n" + Security.getAlgorithms("MessageDigest"));
+    }//GEN-LAST:event_btnInfoActionPerformed
+
+    private void btnAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAboutActionPerformed
+        actionFacade.about(frame);
+    }//GEN-LAST:event_btnAboutActionPerformed
+
     public synchronized static void main(String args[]) {
         
         try {
@@ -518,7 +552,9 @@ public class HashTextGui extends javax.swing.JFrame {
     private javax.swing.JButton bShowClip;
     public javax.swing.JComboBox<String> bcomboDevice;
     private volatile javax.swing.JComboBox<String> bcomboHashTip;
+    private javax.swing.JButton btnAbout;
     private javax.swing.ButtonGroup btnGroup;
+    private javax.swing.JButton btnInfo;
     private javax.swing.JScrollPane fileScrollPane;
     public javax.swing.JTextArea inTF;
     private javax.swing.JLabel jLabel1;
@@ -529,7 +565,6 @@ public class HashTextGui extends javax.swing.JFrame {
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
-    private javax.swing.JToolBar.Separator jSeparator4;
     public javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;

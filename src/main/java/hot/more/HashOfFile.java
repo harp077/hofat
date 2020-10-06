@@ -17,6 +17,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -25,7 +26,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope("singleton")
 //@Scope("prototype")
-//@Lazy(true)
+@Lazy(false)
 @DependsOn(value = {"hashTextGui"})
 public class HashOfFile implements BeanNameAware {
     
@@ -59,11 +60,13 @@ public class HashOfFile implements BeanNameAware {
             hashTextGui.outHashTA.setText("not a file !");
             return;
         }
-        hashTextGui.outHashTA.setText("PLEASE WAIT !!!");
+        hashTextGui.outHashTA.setText("PLEASE WAIT !!!\n");
         /* FileInputStream and BufferedInputStream
            implements AutoClosable     */
         try ( FileInputStream fis = new FileInputStream(buffile);
               BufferedInputStream bis = new BufferedInputStream(fis); )  {
+            System.out.println("Hash of file thread for big file " + path + " = " + Thread.currentThread().getName());
+            hashTextGui.outHashTA.append("Hash of file thread for big file " + path + " = " + Thread.currentThread().getName());
             switch (tip) {
                 case "md2":    fileHash = DigestUtils.md2Hex(bis);    break;
                 case "md5":    fileHash = DigestUtils.md5Hex(bis);    break;
@@ -77,7 +80,6 @@ public class HashOfFile implements BeanNameAware {
                 case "sha512": fileHash = DigestUtils.sha512Hex(bis); break;
             }
             hashTextGui.outHashTA.setText(fileHash);
-            System.out.println("hash of file potok = " + Thread.currentThread().getName());
             //Thread.currentThread().stop();
             //Thread.sleep(1000L);
             //return;

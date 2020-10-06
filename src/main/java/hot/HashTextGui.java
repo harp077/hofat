@@ -328,6 +328,7 @@ public class HashTextGui extends javax.swing.JFrame {
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("Output Hash, right click for context-menu"));
 
+        outHashTA.setEditable(false);
         outHashTA.setColumns(20);
         outHashTA.setRows(5);
         jScrollPane1.setViewportView(outHashTA);

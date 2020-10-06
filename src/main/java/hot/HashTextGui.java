@@ -65,7 +65,7 @@ public class HashTextGui extends javax.swing.JFrame {
     public HashTextGui() {
         initComponents();
         this.setIconImage(FrameIcon.getImage());
-        this.outHashTF.setComponentPopupMenu(mpMenu);
+        this.outHashTA.setComponentPopupMenu(mpMenu);
         this.bcomboHashTip.setModel(new DefaultComboBoxModel<>(typeHashArray));
         jTabbedPane1.addTab("Input Text for hash:", new ImageIcon(getClass().getResource("/img/16x16/text1.png")), textScrollPane);
         jTabbedPane1.addTab("Click File for Hash:", new ImageIcon(getClass().getResource("/img/16x16/tree.png")), fileScrollPane);
@@ -109,22 +109,22 @@ public class HashTextGui extends javax.swing.JFrame {
         if (!buf.isEmpty()) {
             switch (HashTip) {
                 case "md2":
-                    frame.outHashTF.setText(DigestUtils.md2Hex(buf));
+                    frame.outHashTA.setText(DigestUtils.md2Hex(buf));
                     break;
                 case "md5":
-                    frame.outHashTF.setText(DigestUtils.md5Hex(buf));
+                    frame.outHashTA.setText(DigestUtils.md5Hex(buf));
                     break;
                 case "sha1":
-                    frame.outHashTF.setText(DigestUtils.sha1Hex(buf));
+                    frame.outHashTA.setText(DigestUtils.sha1Hex(buf));
                     break;
                 case "sha256":
-                    frame.outHashTF.setText(DigestUtils.sha256Hex(buf));
+                    frame.outHashTA.setText(DigestUtils.sha256Hex(buf));
                     break;
                 case "sha384":
-                    frame.outHashTF.setText(DigestUtils.sha384Hex(buf));
+                    frame.outHashTA.setText(DigestUtils.sha384Hex(buf));
                     break;
                 case "sha512":
-                    frame.outHashTF.setText(DigestUtils.sha512Hex(buf));
+                    frame.outHashTA.setText(DigestUtils.sha512Hex(buf));
                     break;
             }
             this.jTree1.setSelectionRow(-1);
@@ -134,7 +134,7 @@ public class HashTextGui extends javax.swing.JFrame {
     }
 
     public void clearAll() {
-        frame.outHashTF.setText("");
+        frame.outHashTA.setText("");
         frame.inTF.setText("");
     }
 
@@ -188,7 +188,8 @@ public class HashTextGui extends javax.swing.JFrame {
         bcomboDevice = new javax.swing.JComboBox<>();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         jToolBar2 = new javax.swing.JToolBar();
-        outHashTF = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        outHashTA = new javax.swing.JTextArea();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         textScrollPane = new javax.swing.JScrollPane();
         inTF = new javax.swing.JTextArea();
@@ -269,7 +270,7 @@ public class HashTextGui extends javax.swing.JFrame {
         jToolBar1.add(bClear);
         jToolBar1.add(jSeparator3);
 
-        jLabel1.setText("Hash Type = ");
+        jLabel1.setText("Hash Type: ");
         jToolBar1.add(jLabel1);
         jToolBar1.add(jSeparator4);
 
@@ -282,7 +283,7 @@ public class HashTextGui extends javax.swing.JFrame {
         jToolBar1.add(bcomboHashTip);
         jToolBar1.add(jSeparator2);
 
-        jLabel2.setText(" Device = ");
+        jLabel2.setText(" Device: ");
         jToolBar1.add(jLabel2);
 
         bcomboDevice.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -300,10 +301,13 @@ public class HashTextGui extends javax.swing.JFrame {
         jToolBar2.setFloatable(false);
         jToolBar2.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
-        outHashTF.setEditable(false);
-        outHashTF.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        outHashTF.setBorder(javax.swing.BorderFactory.createTitledBorder("Output Hash"));
-        jToolBar2.add(outHashTF);
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("Output Hash"));
+
+        outHashTA.setColumns(20);
+        outHashTA.setRows(5);
+        jScrollPane1.setViewportView(outHashTA);
+
+        jToolBar2.add(jScrollPane1);
 
         getContentPane().add(jToolBar2, java.awt.BorderLayout.SOUTH);
 
@@ -403,7 +407,7 @@ public class HashTextGui extends javax.swing.JFrame {
     }//GEN-LAST:event_bGetHashActionPerformed
 
     private void bCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCopyActionPerformed
-        textTransfer.setClipboardContents(frame.outHashTF.getText());
+        textTransfer.setClipboardContents(frame.outHashTA.getText());
     }//GEN-LAST:event_bCopyActionPerformed
 
     private void mAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mAboutActionPerformed
@@ -415,7 +419,7 @@ public class HashTextGui extends javax.swing.JFrame {
     }//GEN-LAST:event_mGetHashActionPerformed
 
     private void mClipCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mClipCopyActionPerformed
-        textTransfer.setClipboardContents(frame.outHashTF.getText());
+        textTransfer.setClipboardContents(frame.outHashTA.getText());
     }//GEN-LAST:event_mClipCopyActionPerformed
 
     private void mExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mExitActionPerformed
@@ -442,7 +446,7 @@ public class HashTextGui extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void mpCopyClipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mpCopyClipActionPerformed
-        textTransfer.setClipboardContents(frame.outHashTF.getText());
+        textTransfer.setClipboardContents(frame.outHashTA.getText());
     }//GEN-LAST:event_mpCopyClipActionPerformed
 
     private void mpShowClipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mpShowClipActionPerformed
@@ -521,6 +525,7 @@ public class HashTextGui extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
@@ -539,7 +544,7 @@ public class HashTextGui extends javax.swing.JFrame {
     private javax.swing.JMenuItem mpCopyClip;
     private javax.swing.JPopupMenu mpMenu;
     private javax.swing.JMenuItem mpShowClip;
-    public volatile javax.swing.JTextField outHashTF;
+    public javax.swing.JTextArea outHashTA;
     private javax.swing.JScrollPane textScrollPane;
     // End of variables declaration//GEN-END:variables
 }

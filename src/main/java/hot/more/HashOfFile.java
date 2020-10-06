@@ -54,10 +54,10 @@ public class HashOfFile implements BeanNameAware {
         //String fileHash="";
         File buffile = new File(path);
         if (!buffile.isFile()) {
-            hashTextGui.outHashTF.setText("not a file !");
+            hashTextGui.outHashTA.setText("not a file !");
             return;
         }
-        hashTextGui.outHashTF.setText("PLEASE WAIT !!!");
+        hashTextGui.outHashTA.setText("PLEASE WAIT !!!");
         /* FileInputStream and BufferedInputStream
            implements AutoClosable     */
         try ( FileInputStream fis = new FileInputStream(buffile);
@@ -74,7 +74,7 @@ public class HashOfFile implements BeanNameAware {
                 case "sha384": fileHash = DigestUtils.sha384Hex(bis); break;
                 case "sha512": fileHash = DigestUtils.sha512Hex(bis); break;
             }
-            hashTextGui.outHashTF.setText(fileHash);
+            hashTextGui.outHashTA.setText(fileHash);
             System.out.println("hash of file potok = " + Thread.currentThread().getName());
             //Thread.currentThread().stop();
             //Thread.sleep(1000L);

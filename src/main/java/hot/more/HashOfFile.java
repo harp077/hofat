@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Component;
 @Scope("singleton")
 //@Scope("prototype")
 //@Lazy(true)
+@DependsOn(value = {"hashTextGui"})
 public class HashOfFile implements BeanNameAware {
     
     private String myName;

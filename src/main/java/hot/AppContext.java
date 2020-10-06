@@ -24,7 +24,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 //@PropertySource(value = {"file:cfg/hofat.properties"})
 @PropertySource(value = {"classpath:hofat.properties"})
 @EnableAsync
-@EnableScheduling
+//@EnableScheduling
 //@EnableTransactionManagement
 //@EnableLoadTimeWeaving
 //@EnableCaching
@@ -51,10 +51,10 @@ public class AppContext {
         return new PropertySourcesPlaceholderConfigurer();
     }
     
-    @Bean
+    /*@Bean
     public TaskScheduler taskScheduler() {
         return new ConcurrentTaskScheduler();
-    }    
+    } */   
     
     @Bean
     public TaskExecutor taskExecutor() {

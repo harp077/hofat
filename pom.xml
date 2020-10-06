@@ -11,23 +11,13 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <spring-ver>5.1.0.RELEASE</spring-ver>
+        <spring-ver>4.3.25.RELEASE</spring-ver>
     </properties>
+    
+    <name>hofat</name>  
     
     <dependencies>
 
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aop</artifactId>
-            <version>${spring-ver}</version>
-        </dependency> 
-        
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-            <version>${spring-ver}</version>
-        </dependency>  
-        
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
@@ -35,68 +25,23 @@
         </dependency>
         
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-            <version>${spring-ver}</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-indexer</artifactId>
-            <version>${spring-ver}</version>
-        </dependency>                                                                                                           
-        
-        <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.11</version>
+            <version>1.15</version>
         </dependency> 
-        
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>21.0</version>
-        </dependency>        
-        <!--
-        <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-            <version>1.2</version>
-        </dependency>        
-        -->
+
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
             <version>1</version>
         </dependency>
-        <!--
+
         <dependency>
-            <groupId>javax.enterprise</groupId>
-            <artifactId>cdi-api</artifactId>
-            <version>1.2</version>
-            <scope>provided</scope>
-        </dependency>        
-        -->
-        <!--
-        <dependency>
-            <groupId>com.jtattoo</groupId>
-            <artifactId>JTattoo</artifactId>
-            <version>1.6.11</version>
-        </dependency>  
-        -->
-        <dependency>
-            <groupId>com.github.insubstantial</groupId>
-            <artifactId>substance</artifactId>
-            <version>7.3</version>
-        </dependency>        
-        
-        <!--
-        <dependency>
-            <groupId>net.sf.tinylaf</groupId>
+            <groupId>de.muntjak</groupId>
             <artifactId>tinylaf</artifactId>
             <version>1.4.0</version>
         </dependency>                                                                                                            
-        -->
+        
     </dependencies>  
     
     <build>
@@ -159,7 +104,5 @@
         </plugins>
         
     </build> 
-    
-    <name>hofat</name>      
     
 </project>

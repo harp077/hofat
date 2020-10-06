@@ -1,8 +1,8 @@
 package hot;
 
 //import hot.clipboard.ShowClipboard;
-import com.google.common.base.Charsets;
-import com.google.common.hash.Hashing;
+//import com.google.common.base.Charsets;
+//import com.google.common.hash.Hashing;
 import hot.more.TextTransfer;
 import hot.more.HashOfFile;
 import hot.fsmodel.FileSystemModel;
@@ -57,7 +57,7 @@ public class HashTextGui extends javax.swing.JFrame {
 
     public static HashTextGui frame;
     private static final Dimension frameDimension = new Dimension(720, 512);
-    public static String[] typeHashArray = {"md2", "md5", "sha1", "crc32", "crc32c", "sha256", "sha384", "sha512"};
+    public static String[] typeHashArray = {"md2", "md5", "sha1", "sha256", "sha384", "sha512"};
     public ImageIcon FrameIcon = new ImageIcon(getClass().getResource("/img/SubFrameIcon.png"));
     //private String buferHashOfFile = "";
     //private int k = 0;
@@ -76,8 +76,8 @@ public class HashTextGui extends javax.swing.JFrame {
         System.out.println(HashTip);
         System.out.println(currentLAF);
         this.bcomboHashTip.setSelectedItem(HashTip);
-        this.bcomboHashTip.setVisible(false);
-        jRadioButtonMd5.setSelected(true);
+        //this.bcomboHashTip.setVisible(false);
+        //jRadioButtonMd5.setSelected(true);
         this.bcomboDevice.setModel(new DefaultComboBoxModel<>(fsModel.getAllrootsString()));
         //this.bcomboDevice.setSelectedIndex(1);
         this.jTree1.setModel(fsModel);
@@ -86,14 +86,12 @@ public class HashTextGui extends javax.swing.JFrame {
         this.jTabbedPane1.setSelectedIndex(1);
         textTransfer.setClipboardContents("");
         this.setTitle(top);
-        btnGroup.add(jRadioButtonMd2);
+        /*btnGroup.add(jRadioButtonMd2);
         btnGroup.add(jRadioButtonMd5);
         btnGroup.add(jRadioButtonSha1);
-        btnGroup.add(jRadioButtonCrc32);
-        btnGroup.add(jRadioButtonCrc32c);
         btnGroup.add(jRadioButtonSha256);
         btnGroup.add(jRadioButtonSha384);
-        btnGroup.add(jRadioButtonSha512);
+        btnGroup.add(jRadioButtonSha512);*/
     }
 
     //@Scheduled(cron = "*/1 * * * * *")
@@ -119,14 +117,6 @@ public class HashTextGui extends javax.swing.JFrame {
                 case "sha1":
                     frame.outHashTF.setText(DigestUtils.sha1Hex(buf));
                     break;
-                case "crc32":
-                    //frame.outHashTF.setText( Hashing.crc32().hashString(buf, Charsets.UTF_8).toString());
-                    frame.outHashTF.setText( Hashing.crc32().hashUnencodedChars(buf).toString());
-                    break;   
-                case "crc32c":
-                    //frame.outHashTF.setText(Hashing.crc32c().hashString(buf, Charsets.UTF_8).toString());
-                    frame.outHashTF.setText(Hashing.crc32c().hashUnencodedChars(buf).toString());
-                    break;                    
                 case "sha256":
                     frame.outHashTF.setText(DigestUtils.sha256Hex(buf));
                     break;
@@ -157,52 +147,6 @@ public class HashTextGui extends javax.swing.JFrame {
         SwingUtilities.updateComponentTreeUI(frame);
     }
 
-    public void changeHashTipRadio(String tip) {
-        String buf;
-        HashTip = tip;
-        /*jRadioButtonMd2.setSelected(false);
-        jRadioButtonMd5.setSelected(false);
-        jRadioButtonSha1.setSelected(false);
-        jRadioButtonSha256.setSelected(false);
-        jRadioButtonSha384.setSelected(false);
-        jRadioButtonSha512.setSelected(false);
-        switch (HashTip) {
-            case "md2":
-                jRadioButtonMd2.setSelected(true);
-                break;
-            case "md5":
-                jRadioButtonMd5.setSelected(true);
-                break;
-            case "sha1":
-                jRadioButtonSha1.setSelected(true);
-                break;
-            case "sha256":
-                jRadioButtonSha256.setSelected(true);
-                break;
-            case "sha384":
-                jRadioButtonSha384.setSelected(true);
-                break;
-            case "sha512":
-                jRadioButtonSha512.setSelected(true);
-                break;
-        }*/
-        if (textScrollPane.isShowing()) {
-            if (inTF.getText().length() != 0) {
-                GetTextHash(inTF.getText());
-            }
-            return;
-        }
-        if (fileScrollPane.isShowing()) {
-            try {
-                buf = jTree1.getSelectionPath().getLastPathComponent().toString();
-            } catch (NullPointerException ne) {
-                logBean.log(Level.SEVERE, null, ne);
-                return;
-            }
-            hashOfFile.hash_of_File(buf, HashTip);
-        }
-    }
-    
     public void changeHashTipCombo(String tip) {
         String buf;
         HashTip = tip;
@@ -215,11 +159,10 @@ public class HashTextGui extends javax.swing.JFrame {
         if (fileScrollPane.isShowing()) {
             try {
                 buf = jTree1.getSelectionPath().getLastPathComponent().toString();
+                hashOfFile.hash_of_File(buf, HashTip);
             } catch (NullPointerException ne) {
-                logBean.log(Level.SEVERE, null, ne);
-                return;
+                logBean.log(Level.WARNING, "NullPointerException - object for hash not selected !");
             }
-            hashOfFile.hash_of_File(buf, HashTip);
         }
     }    
 
@@ -236,18 +179,11 @@ public class HashTextGui extends javax.swing.JFrame {
         bCopy = new javax.swing.JButton();
         bShowClip = new javax.swing.JButton();
         bClear = new javax.swing.JButton();
-        btnSkin = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JToolBar.Separator();
-        jRadioButtonMd2 = new javax.swing.JRadioButton();
-        jRadioButtonMd5 = new javax.swing.JRadioButton();
-        jRadioButtonSha1 = new javax.swing.JRadioButton();
-        jRadioButtonCrc32 = new javax.swing.JRadioButton();
-        jRadioButtonCrc32c = new javax.swing.JRadioButton();
-        jRadioButtonSha256 = new javax.swing.JRadioButton();
-        jRadioButtonSha384 = new javax.swing.JRadioButton();
-        jRadioButtonSha512 = new javax.swing.JRadioButton();
+        jLabel1 = new javax.swing.JLabel();
         jSeparator4 = new javax.swing.JToolBar.Separator();
         bcomboHashTip = new javax.swing.JComboBox<>();
+        jSeparator2 = new javax.swing.JToolBar.Separator();
         jLabel2 = new javax.swing.JLabel();
         bcomboDevice = new javax.swing.JComboBox<>();
         jSeparator1 = new javax.swing.JToolBar.Separator();
@@ -263,7 +199,6 @@ public class HashTextGui extends javax.swing.JFrame {
         mGetHash = new javax.swing.JMenuItem();
         mClipCopy = new javax.swing.JMenuItem();
         mClearAll = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
         mExit = new javax.swing.JMenuItem();
         mHelp = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -294,7 +229,7 @@ public class HashTextGui extends javax.swing.JFrame {
         jToolBar1.setBorder(javax.swing.BorderFactory.createTitledBorder("Tools"));
         jToolBar1.setFloatable(false);
 
-        bGetHash.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/24x24/media-playback-start.png"))); // NOI18N
+        bGetHash.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/16x16/play_green-1.png"))); // NOI18N
         bGetHash.setToolTipText("Get Hash of Text");
         bGetHash.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -303,7 +238,7 @@ public class HashTextGui extends javax.swing.JFrame {
         });
         jToolBar1.add(bGetHash);
 
-        bCopy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/24x24/clipboard-blue.png"))); // NOI18N
+        bCopy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/16x16/clipboard_plus.png"))); // NOI18N
         bCopy.setToolTipText("Copy Hash to ClipBoard");
         bCopy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -312,7 +247,7 @@ public class HashTextGui extends javax.swing.JFrame {
         });
         jToolBar1.add(bCopy);
 
-        bShowClip.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/24x24/clipboard_search.png"))); // NOI18N
+        bShowClip.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/16x16/clipboard_lupa-16.png"))); // NOI18N
         bShowClip.setToolTipText("Show ClipBoard");
         bShowClip.setFocusable(false);
         bShowClip.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -324,7 +259,7 @@ public class HashTextGui extends javax.swing.JFrame {
         });
         jToolBar1.add(bShowClip);
 
-        bClear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/24x24/edit_clear.png"))); // NOI18N
+        bClear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/16x16/edit_clear-16.png"))); // NOI18N
         bClear.setToolTipText("Clear All");
         bClear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -332,106 +267,10 @@ public class HashTextGui extends javax.swing.JFrame {
             }
         });
         jToolBar1.add(bClear);
-
-        btnSkin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/24x24/skin_color_chooser-24.png"))); // NOI18N
-        btnSkin.setFocusable(false);
-        btnSkin.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnSkin.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnSkin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSkinActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(btnSkin);
         jToolBar1.add(jSeparator3);
 
-        jRadioButtonMd2.setText("md2 ");
-        jRadioButtonMd2.setFocusable(false);
-        jRadioButtonMd2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jRadioButtonMd2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jRadioButtonMd2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonMd2ActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(jRadioButtonMd2);
-
-        jRadioButtonMd5.setText("md5");
-        jRadioButtonMd5.setFocusable(false);
-        jRadioButtonMd5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jRadioButtonMd5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jRadioButtonMd5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonMd5ActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(jRadioButtonMd5);
-
-        jRadioButtonSha1.setText("sha1");
-        jRadioButtonSha1.setFocusable(false);
-        jRadioButtonSha1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jRadioButtonSha1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jRadioButtonSha1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonSha1ActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(jRadioButtonSha1);
-
-        jRadioButtonCrc32.setText("crc32");
-        jRadioButtonCrc32.setFocusable(false);
-        jRadioButtonCrc32.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jRadioButtonCrc32.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jRadioButtonCrc32.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonCrc32ActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(jRadioButtonCrc32);
-
-        jRadioButtonCrc32c.setText("crc32c");
-        jRadioButtonCrc32c.setFocusable(false);
-        jRadioButtonCrc32c.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jRadioButtonCrc32c.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jRadioButtonCrc32c.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonCrc32cActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(jRadioButtonCrc32c);
-
-        jRadioButtonSha256.setText("sha256");
-        jRadioButtonSha256.setFocusable(false);
-        jRadioButtonSha256.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jRadioButtonSha256.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jRadioButtonSha256.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonSha256ActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(jRadioButtonSha256);
-
-        jRadioButtonSha384.setText("sha384");
-        jRadioButtonSha384.setFocusable(false);
-        jRadioButtonSha384.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jRadioButtonSha384.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jRadioButtonSha384.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonSha384ActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(jRadioButtonSha384);
-
-        jRadioButtonSha512.setText("sha512");
-        jRadioButtonSha512.setFocusable(false);
-        jRadioButtonSha512.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jRadioButtonSha512.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jRadioButtonSha512.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonSha512ActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(jRadioButtonSha512);
+        jLabel1.setText("Hash Type = ");
+        jToolBar1.add(jLabel1);
         jToolBar1.add(jSeparator4);
 
         bcomboHashTip.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -441,8 +280,9 @@ public class HashTextGui extends javax.swing.JFrame {
             }
         });
         jToolBar1.add(bcomboHashTip);
+        jToolBar1.add(jSeparator2);
 
-        jLabel2.setText("Device = ");
+        jLabel2.setText(" Device = ");
         jToolBar1.add(jLabel2);
 
         bcomboDevice.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -518,15 +358,6 @@ public class HashTextGui extends javax.swing.JFrame {
             }
         });
         mFile.add(mClearAll);
-
-        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/16x16/color_swatches.png"))); // NOI18N
-        jMenuItem2.setText("Change Skin");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
-            }
-        });
-        mFile.add(jMenuItem2);
 
         mExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/16x16/quit.png"))); // NOI18N
         mExit.setText("Exit");
@@ -610,10 +441,6 @@ public class HashTextGui extends javax.swing.JFrame {
         actionFacade.showClipboard(frame);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        actionFacade.changeLF(frame);
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
-
     private void mpCopyClipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mpCopyClipActionPerformed
         textTransfer.setClipboardContents(frame.outHashTF.getText());
     }//GEN-LAST:event_mpCopyClipActionPerformed
@@ -637,47 +464,23 @@ public class HashTextGui extends javax.swing.JFrame {
         SwingUtilities.updateComponentTreeUI(jTree1);
     }//GEN-LAST:event_bcomboDeviceActionPerformed
 
-    private void jRadioButtonMd2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMd2ActionPerformed
-        changeHashTipRadio("md2");
-    }//GEN-LAST:event_jRadioButtonMd2ActionPerformed
-
-    private void jRadioButtonMd5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMd5ActionPerformed
-        changeHashTipRadio("md5");
-    }//GEN-LAST:event_jRadioButtonMd5ActionPerformed
-
-    private void jRadioButtonSha1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonSha1ActionPerformed
-        changeHashTipRadio("sha1");
-    }//GEN-LAST:event_jRadioButtonSha1ActionPerformed
-
-    private void jRadioButtonSha256ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonSha256ActionPerformed
-        changeHashTipRadio("sha256");
-    }//GEN-LAST:event_jRadioButtonSha256ActionPerformed
-
-    private void jRadioButtonSha384ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonSha384ActionPerformed
-        changeHashTipRadio("sha384");
-    }//GEN-LAST:event_jRadioButtonSha384ActionPerformed
-
-    private void jRadioButtonSha512ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonSha512ActionPerformed
-        changeHashTipRadio("sha512");
-    }//GEN-LAST:event_jRadioButtonSha512ActionPerformed
-
     private void bcomboHashTipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bcomboHashTipActionPerformed
         changeHashTipCombo(bcomboHashTip.getSelectedItem().toString());
     }//GEN-LAST:event_bcomboHashTipActionPerformed
 
-    private void btnSkinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkinActionPerformed
-        actionFacade.changeLF(frame);
-    }//GEN-LAST:event_btnSkinActionPerformed
-
-    private void jRadioButtonCrc32ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonCrc32ActionPerformed
-        changeHashTipRadio("crc32");
-    }//GEN-LAST:event_jRadioButtonCrc32ActionPerformed
-
-    private void jRadioButtonCrc32cActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonCrc32cActionPerformed
-        changeHashTipRadio("crc32c");
-    }//GEN-LAST:event_jRadioButtonCrc32cActionPerformed
-
     public synchronized static void main(String args[]) {
+        
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Metal".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(HashTextGui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }        
+        
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             //java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
@@ -712,22 +515,14 @@ public class HashTextGui extends javax.swing.JFrame {
     public javax.swing.JComboBox<String> bcomboDevice;
     private volatile javax.swing.JComboBox<String> bcomboHashTip;
     private javax.swing.ButtonGroup btnGroup;
-    private javax.swing.JButton btnSkin;
     private javax.swing.JScrollPane fileScrollPane;
     public javax.swing.JTextArea inTF;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JRadioButton jRadioButtonCrc32;
-    private javax.swing.JRadioButton jRadioButtonCrc32c;
-    private javax.swing.JRadioButton jRadioButtonMd2;
-    private javax.swing.JRadioButton jRadioButtonMd5;
-    private javax.swing.JRadioButton jRadioButtonSha1;
-    private javax.swing.JRadioButton jRadioButtonSha256;
-    private javax.swing.JRadioButton jRadioButtonSha384;
-    private javax.swing.JRadioButton jRadioButtonSha512;
     private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
     public javax.swing.JTabbedPane jTabbedPane1;
